@@ -1,11 +1,17 @@
+import { useEffect, useState } from "react";
 import "./App.css";
-import { useState } from "react";
+import getProducts from "./services/productApi";
 function App() {
-  const [randomN, setRandomN]: any[] = useState("genera numero");
+  const [products, setProducts] = useState(null);
+
+  useEffect(() => {
+    setProducts(getProducts());
+  }, []);
+  if (!products) return <>404</>;
   return (
-    <div className="App">
-      <button onClick={() => setRandomN(Math.random())}>{randomN}</button>
-    </div>
+    <>
+      <nav></nav>
+    </>
   );
 }
 
