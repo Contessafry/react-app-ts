@@ -1,11 +1,12 @@
-function Card({ product }: any) {
-  const { title, description, image } = product;
+function Card({ product, onClick }: any) {
+  const { title, description, image, id } = product;
+
   return (
     <div className="card">
       <img src={image} alt={title} />
       <h2>{title}</h2>
       <p>{description}</p>
-      <button></button>
+      <button onClick={() => onClick(id)}></button>
     </div>
   );
 }
