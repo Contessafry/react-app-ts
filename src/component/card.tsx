@@ -1,18 +1,11 @@
-function Card({
-  title,
-  description,
-  image,
-}: {
-  title: string;
-  description: string;
-  image: string;
-}) {
+function Card({ product }: any) {
+  const { title, description, image } = product;
   return (
     <div className="card">
       <img src={image} alt={title} />
       <h2>{title}</h2>
       <p>{description}</p>
-      <button onClick={() => addTocart}></button>
+      <button></button>
     </div>
   );
 }
