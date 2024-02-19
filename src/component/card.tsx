@@ -1,12 +1,31 @@
+import React from "react";
+import IconButton from "@mui/material/IconButton";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import MUiCardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import "./Card.css";
+
 function Card({ product, onClick }: any) {
   const { title, description, image, id } = product;
 
   return (
     <div className="card">
-      <img src={image} alt={title} />
-      <h2>{title}</h2>
-      <p>{description}</p>
-      <button onClick={() => onClick(id)}></button>
+      <MUiCardMedia component="img" height="140" image={image} alt={title} />
+      <Typography gutterBottom variant="h5">
+        {" "}
+        {title}
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        {description}
+      </Typography>
+
+      <IconButton
+        color="primary"
+        aria-label="add to shopping cart"
+        onClick={() => onClick(id)}
+      >
+        <AddShoppingCartIcon />
+      </IconButton>
     </div>
   );
 }
