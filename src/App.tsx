@@ -4,29 +4,14 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import getProducts from "./services/productApi";
 import Card from "./component/card";
 import { ThemeProvider } from "@emotion/react";
-import { createTheme } from "@mui/material/styles";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#000",
-    },
-    secondary: {
-      main: "#fff",
-    },
-    background: {
-      default: "#fff",
-    },
-  },
-  typography: {
-    fontFamily: "Roboto, sans-serif",
-  },
-});
-
+import { theme } from "./component/UIComponents";
+import { calculateTotalPrice, addToCart } from "./cartUtils";
 function App() {
   const [products, setProducts] = useState<null | object[]>(null);
   const [cart, setCart] = useState<string[]>([]);
   const [isCart, setIsCart] = useState(false);
+  const [isHome, setIsHome] = useState(true);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -37,21 +22,41 @@ function App() {
     fetchProducts();
   }, []);
   function onClickBtn(id: string) {
-    setCart([...cart, id]);
+    setCart(addToCart(id, cart));
   }
 
-  if (!products) return <h1>404</h1>;
+  useEffect(() => {
+    const productsArray = products || [];
+    if (productsArray.length > 0) {
+      setTotalPrice(calculateTotalPrice(cart, productsArray, isCart));
+    }
+  }, [isCart, cart, products]);
+
+  if (!products) return <h1>Loading..</h1>;
+
+  //Cambiare la visualizzazione tra home e carrello
+  const toggleView = () => {
+    setIsHome(!isHome);
+    setIsCart(!isCart);
+  };
 
   return (
     <ThemeProvider theme={theme}>
-      <nav>
+      <nav style={{ display: "flex", justifyContent: "flex-end" }}>
         <Button
+          style={{
+            height: "60px",
+            width: "auto",
+            minWidth: "60px",
+          }}
           variant="outlined"
           startIcon={<AddShoppingCartIcon />}
-          onClick={() => setIsCart(!isCart)}
-          style={{ height: "60px", width: "auto", minWidth: "60px" }}
+          onClick={toggleView}
         >
-          <span style={{ marginRight: "8px" }}>CARRELLO</span>
+          <span style={{ marginRight: "8px" }}>
+            {isHome ? "CARRELLO" : "HOME"}
+            {isCart && <span>(${totalPrice.toFixed(2)})</span>}
+          </span>
 
           {cart.length}
         </Button>
